@@ -12,8 +12,8 @@ load_dotenv(REPO_ROOT / ".env")
 load_dotenv(RAG_ROOT / ".env")
 
 # --- Data locations ---
-DATA_DIR = RAG_ROOT / "data" / "pdf"
-VECTOR_DIR = RAG_ROOT / "data" / "vector_store"   # gitignored, rebuilt by scripts/ingest.py
+DATA_DIR = REPO_ROOT / "data" / "pdf"
+VECTOR_DIR = REPO_ROOT / "data" / "vector_store"   # gitignored, rebuilt by scripts/ingest.py
 COLLECTION_NAME = "documents"
 
 # --- Chunking / embeddings ---
