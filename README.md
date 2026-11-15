@@ -1,4 +1,4 @@
-# Ragbot
+# AlmondBot
 
 Ask questions about your own PDFs and get answers with page-level citations. Drop PDFs into `data/pdf/`, index them once, and chat in the browser.
 

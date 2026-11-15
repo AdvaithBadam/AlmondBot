@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from ragbot import RAGPipeline
+from ragbot import RAGPipeline, config
 
 from .schemas import ChatIn
 
@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Ragbot", lifespan=lifespan)
+app = FastAPI(title="AlmondBot", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -49,6 +49,24 @@ app.add_middleware(
 @app.get("/api/health")
 def health():
     return {"status": "ok", "chunks": app.state.pipeline.retriever.vector_store.count()}
+
+
+@app.get("/api/info")
+def info():
+    """What the UI shows in the sidebar and About page: indexed PDFs and the models in use."""
+    store = app.state.pipeline.retriever.vector_store
+    metadatas = store.collection.get(include=["metadatas"])["metadatas"] or []
+    docs = {}
+    for meta in metadatas:
+        doc = docs.setdefault(meta["source_file"], {"name": meta["source_file"], "chunks": 0, "pages": 0})
+        doc["chunks"] += 1
+        doc["pages"] = max(doc["pages"], meta.get("total_pages", 0))
+    return {
+        "documents": sorted(docs.values(), key=lambda d: d["name"].lower()),
+        "chunks": store.count(),
+        "embedding_model": config.EMBEDDING_MODEL,
+        "llm_model": config.LLM_MODEL,
+    }
 
 
 @app.post("/api/chat/stream")

@@ -25,7 +25,7 @@ CHUNK_OVERLAP = 200
 TOP_K = 5
 # Cosine similarity cutoff. Tune it: ask a few off-topic questions and a few
 # on-topic ones with scripts/ask.py --show-context and pick a value between them.
-MIN_SCORE = 0.30
+MIN_SCORE = 0.12
 
 # --- LLM (key is read from the GROQ_API_KEY environment variable) ---
 LLM_MODEL = "openai/gpt-oss-20b"

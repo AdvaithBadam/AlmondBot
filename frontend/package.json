@@ -11,7 +11,9 @@
     "dependencies": {
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "react-markdown": "^9.0.1"
+        "react-markdown": "^9.0.1",
+        "@fontsource-variable/fraunces": "^5.2.0",
+        "@fontsource-variable/source-serif-4": "^5.2.0"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.1",

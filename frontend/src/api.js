@@ -35,3 +35,10 @@ export async function* streamChat(question, history, signal) {
         }
     }
 }
+
+// Indexed PDFs (name, pages, chunks) and the model names, for the sidebar and About page.
+export async function getInfo() {
+    const res = await fetch(`${BASE}/api/info`);
+    if (!res.ok) throw new Error(`Info request failed (${res.status})`);
+    return res.json();
+}

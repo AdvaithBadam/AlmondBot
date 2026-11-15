@@ -1,37 +1,35 @@
 import { useEffect, useState } from "react";
-import { getHealth } from "./api";
+import { getInfo } from "./api";
+import About from "./components/About";
 import Chat from "./components/Chat";
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
-    const [chunks, setChunks] = useState(null);
+    const [view, setView] = useState("chat");
+    const [info, setInfo] = useState(null);
     const [offline, setOffline] = useState(false);
+    const [chatKey, setChatKey] = useState(0);
 
     useEffect(() => {
-        getHealth()
-            .then((h) => setChunks(h.chunks))
+        getInfo()
+            .then(setInfo)
             .catch(() => setOffline(true));
     }, []);
 
+    // A new key remounts Chat, which clears the conversation (and stops any answer in progress)
+    const newChat = () => {
+        setChatKey((k) => k + 1);
+        setView("chat");
+    };
+
+    // Both views stay mounted, so switching to About doesn't throw away the conversation
     return (
-        <div className="app">
-            <header>
-                <h1>Ragbot</h1>
-                {chunks !== null && <span>{chunks} chunks indexed</span>}
-            </header>
-
-            {offline && (
-                <p className="banner bad">
-                    Can't reach the backend. Start it with <code>uvicorn backend.app.main:app --port 8000</code>.
-                </p>
-            )}
-            {chunks === 0 && (
-                <p className="banner">
-                    No documents indexed yet. Put PDFs in <code>data/pdf/</code>, run{" "}
-                    <code>python rag/scripts/ingest.py</code>, then reload this page.
-                </p>
-            )}
-
-            <Chat />
+        <div className="shell">
+            <Sidebar view={view} onNav={setView} onNew={newChat} info={info} offline={offline} />
+            <div className="main">
+                <Chat key={chatKey} hidden={view !== "chat"} info={info} offline={offline} />
+                <About hidden={view !== "about"} info={info} />
+            </div>
         </div>
     );
 }
