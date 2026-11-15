@@ -1,9 +1,9 @@
 chromadb
-numpy
+sentence-transformers
 langchain-core
 langchain-text-splitters
+langchain-groq
 pypdf
 python-dotenv
-sentence-transformers
-langchain-groq
+numpy
 pytest
